@@ -28,13 +28,6 @@ namespace TheatricalPlayersRefactoringKata
                 default:
                     throw new Exception("unknown type: " + play.Type);
             }
-            // add volume credits
-            // volumeCredits += Math.Max(perf.Audience - 30, 0);
-            // add extra credit for every ten comedy attendees
-            // if ("comedy" == play.Type) volumeCredits += (int)Math.Floor((decimal)perf.Audience / 5);
-
-            // print line for this order
-            // totalAmount += thisAmount;
             return (
                 play.Name, thisAmount, perf.Audience
             );
