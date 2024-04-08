@@ -6,10 +6,19 @@ namespace TheatricalPlayersRefactoringKata
 {
     public class StatementPrinter
     {
-        private (string, int, int) CalculatePlay(Performance perf, Dictionary< string, Play > plays )
+        private (Play, int, int) CalculatePlay(Performance perf, Dictionary< string, Play > plays )
         {
             var play = plays[perf.PlayID];
             var thisAmount = 0;
+            thisAmount = CalculateSingelAmount(perf, play);
+            return (
+                play, thisAmount, perf.Audience
+            );
+        }
+
+        private static int CalculateSingelAmount(Performance perf, Play play)
+        {
+            int thisAmount;
             switch (play.Type) 
             {
                 case "tragedy":
@@ -28,10 +37,10 @@ namespace TheatricalPlayersRefactoringKata
                 default:
                     throw new Exception("unknown type: " + play.Type);
             }
-            return (
-                play.Name, thisAmount, perf.Audience
-            );
+
+            return thisAmount;
         }
+
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
             var totalAmount = 0;
@@ -45,11 +54,10 @@ namespace TheatricalPlayersRefactoringKata
                 // add volume credits
                 volumeCredits += Math.Max(perf.Audience - 30, 0);
                 // add extra credit for every ten comedy attendees
-                var play = plays[perf.PlayID];
-                if ("comedy" == play.Type) volumeCredits += (int)Math.Floor((decimal)perf.Audience / 5);
+                if ("comedy" == pay.Item1.Type) volumeCredits += (int)Math.Floor((decimal)perf.Audience / 5);
 
                 // print line for this order
-                result += String.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", play.Name, Convert.ToDecimal(pay.Item2/ 100), perf.Audience);
+                result += String.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", pay.Item1.Name, Convert.ToDecimal(pay.Item2/ 100), perf.Audience);
                 totalAmount += pay.Item2;
             }
             result += String.Format(cultureInfo, "Amount owed is {0:C}\n", Convert.ToDecimal(totalAmount / 100));
