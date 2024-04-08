@@ -43,10 +43,10 @@ namespace TheatricalPlayersRefactoringKata
 
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
+            var result = string.Format("Statement for {0}\n", invoice.Customer);
             var totalAmount = 0;
             var volumeCredits = 0;
             var toReturn = new List<(Play, int, int)>(); 
-            var result = string.Format("Statement for {0}\n", invoice.Customer);
             CultureInfo cultureInfo = new CultureInfo("en-US");
 
             foreach(var perf in invoice.Performances)
@@ -58,9 +58,14 @@ namespace TheatricalPlayersRefactoringKata
                 if ("comedy" == pay.Item1.Type) volumeCredits += (int)Math.Floor((decimal)perf.Audience / 5);
 
                 // print line for this order
-                result += String.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", pay.Item1.Name, Convert.ToDecimal(pay.Item2/ 100), perf.Audience);
+                
                 totalAmount += pay.Item2;
                 toReturn.Add(pay);
+            }
+
+            foreach (var pay in toReturn)
+            {
+                result += String.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", pay.Item1.Name, Convert.ToDecimal(pay.Item2/ 100), pay.Item3);                
             }
             result += String.Format(cultureInfo, "Amount owed is {0:C}\n", Convert.ToDecimal(totalAmount / 100));
             result += String.Format("You earned {0} credits\n", volumeCredits);
