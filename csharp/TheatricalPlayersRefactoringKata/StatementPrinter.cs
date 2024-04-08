@@ -9,10 +9,10 @@ namespace TheatricalPlayersRefactoringKata
         private (Play, int, int) CalculatePlay(Performance perf, Dictionary< string, Play > plays )
         {
             var play = plays[perf.PlayID];
-            var thisAmount = 0;
-            thisAmount = CalculateSingelAmount(perf, play);
+            var price = 0;
+            price = CalculateSingelAmount(perf, play);
             return (
-                play, thisAmount, perf.Audience
+                play, price, perf.Audience
             );
         }
 
@@ -45,6 +45,7 @@ namespace TheatricalPlayersRefactoringKata
         {
             var totalAmount = 0;
             var volumeCredits = 0;
+            var toReturn = new List<(Play, int, int)>(); 
             var result = string.Format("Statement for {0}\n", invoice.Customer);
             CultureInfo cultureInfo = new CultureInfo("en-US");
 
@@ -59,6 +60,7 @@ namespace TheatricalPlayersRefactoringKata
                 // print line for this order
                 result += String.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", pay.Item1.Name, Convert.ToDecimal(pay.Item2/ 100), perf.Audience);
                 totalAmount += pay.Item2;
+                toReturn.Add(pay);
             }
             result += String.Format(cultureInfo, "Amount owed is {0:C}\n", Convert.ToDecimal(totalAmount / 100));
             result += String.Format("You earned {0} credits\n", volumeCredits);
